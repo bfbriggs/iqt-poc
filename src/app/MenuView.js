@@ -3,7 +3,7 @@ define(function(require, exports, module) {
   var Surface = require('famous/core/Surface');
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
-  var StateModifier = require('famous/modifiers/StateModifier');
+  var Fader = require('famous/modifiers/Fader');
 
   function MenuView() {
     View.apply(this, arguments);
@@ -14,10 +14,15 @@ define(function(require, exports, module) {
         properties: {
           lineHeight: "200px",
           textAlign: "center",
-          backgroundColor: "rgba(155,155,100,0.5)"
+          backgroundImage: "-webkit-gradient( linear, left top , right top, from(rgba(0,0,0,0.8)), to(rgba(80,80,80,0.1)))"
         }
     });
-    this._add(surface);
+
+    var fader = new Fader({cull:true},true);
+    surface.on('click', function(){
+      fader.hide();
+    });
+    this._add(fader).add(surface);
   }
 
   MenuView.prototype = Object.create(View.prototype);
