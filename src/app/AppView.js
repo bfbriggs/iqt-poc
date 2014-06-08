@@ -17,15 +17,15 @@ define(function(require, exports, module) {
                 backgroundColor: "blue"
           }
     });
-    var mod = new StateModifier();
+    var mod = new StateModifier({origin: [1,0.5]});
     
     surface.on('click',function(){
-      mod.setTransform(Transform.multiply(Transform.multiply(
+      var transform = Transform.multiply(Transform.multiply(
      //                 Transform.translate(window.innerWidth - 140, 0, 80),
-                      Transform.translate(0, 80, 0),
+                      Transform.translate(0, 0, 0),
                       Transform.rotateY(-1 * Math.PI/6)
-                      ), Transform.scale(0.6, 0.6, 1)),
-        { duration : 1000, curve: 'linear' });
+                      ), Transform.scale(0.9, 0.9, 1));
+      mod.setTransform(transform, { duration : 600, curve: 'easeOut' });
     });
      this._add(mod).add(surface);
   }
