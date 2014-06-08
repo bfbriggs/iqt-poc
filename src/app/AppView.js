@@ -3,7 +3,8 @@ define(function(require, exports, module) {
   var Surface = require('famous/core/Surface');
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
-  
+  var StateModifier = require('famous/modifiers/StateModifier');
+ 
   function AppView() {
     View.apply(this, arguments);
     var surface = new Surface({
@@ -16,15 +17,17 @@ define(function(require, exports, module) {
                 backgroundColor: "blue"
           }
     });
-    var rotateModifier = new Modifier({
-      transform : Transform.multiply(Transform.multiply(
+    var mod = new StateModifier();
+    
+    surface.on('click',function(){
+      mod.setTransform(Transform.multiply(Transform.multiply(
      //                 Transform.translate(window.innerWidth - 140, 0, 80),
                       Transform.translate(0, 80, 0),
                       Transform.rotateY(-1 * Math.PI/6)
-                      ), Transform.scale(0.6, 0.6, 1))
+                      ), Transform.scale(0.6, 0.6, 1)),
+        { duration : 1000, curve: 'linear' });
     });
-        
-    this._add(rotateModifier).add(surface);
+     this._add(mod).add(surface);
   }
 
   AppView.prototype = Object.create(View.prototype);
