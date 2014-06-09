@@ -9,8 +9,8 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
     var surface = new Surface({
       size: [undefined, undefined],
-        content: "Hello World",
-        classes: ["red-bg"],
+        content: "",
+        classes: ["menu"],
         properties: {
           lineHeight: "200px",
           textAlign: "center",

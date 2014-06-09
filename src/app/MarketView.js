@@ -20,10 +20,11 @@ define(function(require, exports, module) {
     });
 
     this.pivotOut = Transform.multiply(
-          Transform.rotateY(-1 * Math.PI/6)
-          , Transform.scale(0.9, 0.9, 1));
+          Transform.rotateY(-1 * Math.PI/6),
+          Transform.scale(0.9, 0.9, 1),
+          Transform.identity);
+    
 
-    this.pivotBack = Transform.inverse(this.pivotOut);
 
     surface.on('click',function(){
       this._eventOutput.emit('showMenu');
@@ -36,7 +37,7 @@ define(function(require, exports, module) {
   MarketView.prototype = Object.create(View.prototype);
   
   MarketView.prototype.swingBack = function(){
-      this.mod.setTransform(this.pivotBack, { duration : 600, curve: 'easeOut' });
+      this.mod.setTransform(Transform.identity, { duration : 600, curve: 'easeOut' });
   };
   
   MarketView.prototype.constructor = MarketView;
