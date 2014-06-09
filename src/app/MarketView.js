@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
   function MarketView() {
     View.apply(this, arguments);
-    var mod = new StateModifier({origin: [1,0.5]});
+    this.mod = new StateModifier({origin: [1,0.5]});
     var surface = new Surface({
       size: [undefined, undefined],
         content: "Hello World",
@@ -19,18 +19,26 @@ define(function(require, exports, module) {
         }
     });
 
-    surface.on('click',function(){
-      var transform = Transform.multiply(Transform.multiply(
-          //Transform.translate(window.innerWidth - 140, 0, 80),
-          Transform.translate(0, 0, 0),
+    this.pivotOut = Transform.multiply(
           Transform.rotateY(-1 * Math.PI/6)
-          ), Transform.scale(0.9, 0.9, 1));
-      mod.setTransform(transform, { duration : 600, curve: 'easeOut' });
-    });
-    this._add(mod).add(surface);
+          , Transform.scale(0.9, 0.9, 1));
+
+    this.pivotBack = Transform.inverse(this.pivotOut);
+
+    surface.on('click',function(){
+      this._eventOutput.emit('showMenu');
+      this.mod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' });
+    }.bind(this));
+    this._add(this.mod).add(surface);
   }
 
+
   MarketView.prototype = Object.create(View.prototype);
+  
+  MarketView.prototype.swingBack = function(){
+      this.mod.setTransform(this.pivotBack, { duration : 600, curve: 'easeOut' });
+  };
+  
   MarketView.prototype.constructor = MarketView;
 
   module.exports = MarketView;

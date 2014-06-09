@@ -8,7 +8,7 @@ define(function(require, exports, module) {
   function MenuView() {
     View.apply(this, arguments);
     var surface = new Surface({
-      size: [200, undefined],
+      size: [undefined, undefined],
         content: "Hello World",
         classes: ["red-bg"],
         properties: {
@@ -18,11 +18,12 @@ define(function(require, exports, module) {
         }
     });
 
-    var fader = new Fader({cull:true},true);
+    this.fader = new Fader({cull:true},false);
     surface.on('click', function(){
-      fader.hide();
-    });
-    this._add(fader).add(surface);
+      this.fader.hide();
+      this._eventOutput.emit('restoreContent');
+    }.bind(this));
+    this._add(this.fader).add(surface);
   }
 
   MenuView.prototype = Object.create(View.prototype);
