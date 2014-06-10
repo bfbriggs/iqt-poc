@@ -10,6 +10,7 @@ define(function(require, exports, module) {
 
   function AppView() {
     View.apply(this, arguments);
+    //addBackground.call(this);
     this.marketView = new MarketView();
     this.menuView = new MenuView();
     this._add(this.marketView);
@@ -25,6 +26,22 @@ define(function(require, exports, module) {
     this.menuView.on('restoreContent',function(){
       this.marketView.swingBack(); 
     }.bind(this));
+  }
+
+  function addBackground() {
+    var backSurface = new Surface({
+      size: [undefined, undefined],
+        content: "",
+        classes: ["background"],
+        properties: {
+          backgroundColor: 'black'
+        },
+        transform: Transform.behind
+    });
+    var backModifier = new StateModifier({
+        transform: Transform.behind
+    });
+    this.add(backModifier).add(backSurface);
   }
 
   AppView.prototype = Object.create(View.prototype);

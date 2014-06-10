@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
+  var ImageSurface = require('famous/surfaces/ImageSurface');
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
@@ -8,19 +9,13 @@ define(function(require, exports, module) {
   function MarketView() {
     View.apply(this, arguments);
     this.mod = new StateModifier({origin: [1,0.5]});
-    var surface = new Surface({
-      size: [undefined, undefined],
-        content: "Hello World",
-        classes: ["red-bg"],
-        properties: {
-          lineHeight: "200px",
-          textAlign: "center",
-          backgroundColor: "blue"
-        }
+    var surface = new ImageSurface({
+      size: [undefined, undefined]
     });
 
+    surface.setContent('./images/market_screen.png');
     this.pivotOut = Transform.multiply(
-          Transform.rotateY(-1 * Math.PI/6),
+          Transform.rotateY(-1 * Math.PI/8),
           Transform.scale(0.9, 0.9, 1),
           Transform.identity);
     
