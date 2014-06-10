@@ -20,10 +20,16 @@ define(function(require, exports, module) {
           Transform.identity);
     
 
+    var transitioning = false;
 
     surface.on('click',function(){
       this._eventOutput.emit('showMenu');
-      this.mod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' });
+      if (!transitioning){
+        transitioning = true;
+        this.mod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' }, function(){
+          transitioning = false;
+        });
+      }
     }.bind(this));
     this._add(this.mod).add(surface);
   }

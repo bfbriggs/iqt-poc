@@ -56,8 +56,13 @@ define(function(require, exports, module) {
     fade.add(searchModifier).add(searchSurface);
     
     menuSurface.on('click', function(){
-      this.fader.hide();
-      this._eventOutput.emit('restoreContent');
+      if (!this.transitioning){
+        this.transitioning = true;
+        this.fader.hide(undefined, function(){
+          this.transitioning = false;
+        }.bind(this));
+        this._eventOutput.emit('restoreContent');
+      }
     }.bind(this));
 
 
@@ -66,5 +71,11 @@ define(function(require, exports, module) {
   MenuView.prototype = Object.create(View.prototype);
   MenuView.prototype.constructor = MenuView;
 
+  MenuView.prototype.show = function() {
+    this.transitioning = true;
+    this.fader.show(undefined, function(){
+      this.transitioning = false;
+    }.bind(this));
+  }
   module.exports = MenuView;
 });

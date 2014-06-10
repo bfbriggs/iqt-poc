@@ -20,7 +20,8 @@ define(function(require, exports, module) {
 
   function setUpListeners() {
     this.marketView.on('showMenu',function(){
-      this.menuView.fader.show();
+//      this.menuView.fader.show();
+        this.menuView.show();
     }.bind(this));
     
     this.menuView.on('restoreContent',function(){
