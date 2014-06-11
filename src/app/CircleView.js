@@ -8,21 +8,23 @@ define(function(require, exports, module){
 
   function CircleView() {
     View.apply(this, arguments);
-    this.centralAngle = 4 * Math.atan(this.csHeight/(this.chordLength/2));
-    this.circleRadius = (this.chordLength/2)/Math.sin(this.centralAngle/2);
+    this.centralAngle = 4 * Math.atan(this.csHeight / (this.chordLength / 2));
+    this.circleRadius = (this.chordLength / 2) / Math.sin(this.centralAngle / 2);
     this.circumference = 2 * Math.PI * this.circleRadius;
-    this.arcLength = this.circumference * this.centralAngle/(2*Math.PI);
-
-    var offset;
+    this.arcLength = this.circumference * this.centralAngle / (2 * Math.PI);
+    // Hard-coded... for now...
+    var offset = 0;
     // initialize bars
     MarketData.map(function(item, idx){
-      return new BarView(barPos.call(this, idx, offset));
+      var barOpts = barPos.call(this, idx, offset);
+      barOpts['data'] = item;
+      return new BarView(barOpts);
     }.bind(this));
   }
 
   function barPos(idx, offset) {
     var barOffset = this.barWidth + this.barGap;
-    var tinyAngle = 2 * Math.PI * barOffset/this.circumference;
+    var tinyAngle = 2 * Math.PI * barOffset / this.circumference;
     var triAngle = Math.PI/2 - tinyAngle * (offset + idx);
     var x = Math.cos(triAngle) * this.circleRadius;
     var y = Math.sin(triAngle) * this.circleRadius;
