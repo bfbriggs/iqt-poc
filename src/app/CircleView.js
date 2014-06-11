@@ -15,12 +15,13 @@ define(function(require, exports, module){
     // Hard-coded... for now...
     var offset = 0;
     // initialize bars
-    MarketData.map(function(item, idx){
+    this.bars = MarketData.map(function(item, idx){
       var barOpts = barPos.call(this, idx, offset);
       barOpts['data'] = item;
       return new BarView(barOpts);
     }.bind(this));
   }
+
 
   function barPos(idx, offset) {
     var barOffset = this.barWidth + this.barGap;
@@ -44,6 +45,39 @@ define(function(require, exports, module){
     csHeight: 200,
     barGap: 30,
     barWidth: 20,
+    dragMultiple:1
   };
+
+
+  CircleView.prototype.getVisibleBars = function(){
+    //convert to binary search
+    var searchArr = [];
+    return this.bars.filter(function(bar){
+      return bar.isVisible();
+    });
+  }
+
+  // Set new positions of bars
+  CircleView.prototype.updateBars = function(delta){
+    //Grab slice that definitely needs to be update
+    var visibleBarsObj = this.getVisibleBars();
+    var visibleBars = visibleBarsObj.arr;
+    var startOffset = visibleBarsObj.startOffset;
+    var endOffset = visibleBarsObj.endOffset;
+
+    //right
+    if (delta > 0){
+      this.getLeft(this.bars).concat(visibleBars).map(function(bar){
+        bar.updatePos(delta);
+      });   
+    }
+    //left
+    else if (delta < 0){
+      visibleBars.concat(this.getLeft(this.bars)).map(function(bar){
+        bar.updatePos(delta);
+      });   
+    }
+  }
+
 
 });
