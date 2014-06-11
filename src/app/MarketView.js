@@ -5,9 +5,17 @@ define(function(require, exports, module) {
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
-
+  var GenericSync     = require('famous/inputs/GenericSync');
+  var MouseSync       = require('famous/inputs/MouseSync');
+  var TouchSync       = require('famous/inputs/TouchSync');
+  
+  GenericSync.register({'mouse': MouseSync, 'touch': TouchSync});
+  
   function MarketView() {
+    var transitioning = false;
+    
     View.apply(this, arguments);
+    _handleSwipe.call(this);
     this.mod = new StateModifier({origin: [1,0.5]});
     var surface = new ImageSurface({
       size: [undefined, undefined]
@@ -18,9 +26,7 @@ define(function(require, exports, module) {
           Transform.rotateY(-1 * Math.PI/8),
           Transform.scale(0.9, 0.9, 1),
           Transform.identity);
-    
 
-    var transitioning = false;
 
     surface.on('click',function(){
       this._eventOutput.emit('showMenu');
@@ -31,6 +37,8 @@ define(function(require, exports, module) {
         });
       }
     }.bind(this));
+    surface.pipe(this._eventOutput);
+
     this._add(this.mod).add(surface);
   }
 
@@ -42,6 +50,22 @@ define(function(require, exports, module) {
   };
   
   MarketView.prototype.constructor = MarketView;
+
+  function _handleSwipe() {
+    var sync = new GenericSync(
+      ['mouse', 'touch'],
+      {direction : GenericSync.DIRECTION_X}
+    );
+
+    this.pipe(sync);
+
+    sync.on('update', function(data) {
+      console.log(data.delta);
+      console.log(data);
+    }.bind(this));
+    console.log('bindings');
+  }
+
 
   module.exports = MarketView;
 });

@@ -8,6 +8,9 @@ define(function(require, exports, module) {
   var ImageSurface = require('famous/surfaces/ImageSurface');
 
   function MenuView() {
+    var searchSize = [undefined, window.innerWidth * 90/1126];
+    var menuSize = [window.innerWidth * 268/1126, window.innerHeight * 518/728];
+
     View.apply(this, arguments);
     var backSurface = new Surface({
       size: [undefined, undefined],
@@ -31,7 +34,7 @@ define(function(require, exports, module) {
     fade.add(backModifier).add(backSurface);
 
     var menuSurface = new ImageSurface({
-      size: [268, 518]
+      size: menuSize
     });
     menuSurface.setContent('./images/menu.png');
     
@@ -39,12 +42,9 @@ define(function(require, exports, module) {
       align: [0,1],
       origin: [0,1]
     });
-    
-
-
 
     var searchSurface = new ImageSurface({
-      size: [undefined, 82]
+      size: searchSize
     });
     searchSurface.setContent('./images/search.png');
     

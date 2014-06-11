@@ -10,7 +10,6 @@ define(function(require, exports, module) {
 
   function AppView() {
     View.apply(this, arguments);
-    //addBackground.call(this);
     this.marketView = new MarketView();
     this.menuView = new MenuView();
     this._add(this.marketView);
@@ -20,7 +19,6 @@ define(function(require, exports, module) {
 
   function setUpListeners() {
     this.marketView.on('showMenu',function(){
-//      this.menuView.fader.show();
         this.menuView.show();
     }.bind(this));
     
