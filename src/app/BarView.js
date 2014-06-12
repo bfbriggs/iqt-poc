@@ -9,7 +9,11 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
     this.options = this.constructor.DEFAULT_OPTIONS;
     this.dataOptions = options;
-    this.modifier = new StateModifier({});
+    this.modifier = new StateModifier({
+      origin: [0.5, 0.5],
+      align: [0,0.5]
+      
+    });
     this.surface = createSurface.call(this, options.data);
     this._add(this.modifier).add(this.surface);
   }
@@ -19,7 +23,7 @@ define(function(require, exports, module) {
     var gradient = (positive) ? this.options.positiveGradient : this.options.negativeGradient;
     console.log(gradient);
     var surface = new Surface({
-      size: [20, 50],
+      size: [20, 20],
       content: '',
       properties: {
         backgroundImage: gradient
@@ -39,6 +43,7 @@ define(function(require, exports, module) {
 
   // update position
   BarView.prototype.updatePos = function(angleDelta){
+  console.log(angleDelta);
    var newAngle = this.getPos().angle + angleDelta;
    var coords = pol2Car(newAngle, this.dataOptions.circle.circleRadius); 
   
@@ -46,7 +51,13 @@ define(function(require, exports, module) {
    this.dataOptions.y = coords.y;
    this.dataOptions.angle = newAngle;
 
-    this.modifier.setTransform(Transform.translate(coords.x, coords.y, 0));
+    var halfOffset = this.dataOptions.circle.chordLength / 2 + 100;
+   console.log("*******",coords);
+   console.log('****half',halfOffset);
+
+   var widthOff = window.innerWidth/2;
+   var heightOff = window.innerHeight/2;
+    this.modifier.setTransform(Transform.translate(widthOff + coords.x,  - coords.y, 0));
   };
 
   BarView.prototype.getPos = function(){
@@ -65,8 +76,8 @@ define(function(require, exports, module) {
   // angle is the central angle of the arc from the top of the circle to the specified point
   function pol2Car(angle, radius){
     return {
-      x: Math.cos(angle) * radius,
-      y: Math.sin(angle) * radius
+      x: Math.sin(angle) * radius,
+      y: Math.cos(angle) * radius
     };
   }
 

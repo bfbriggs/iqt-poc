@@ -17,14 +17,18 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
     _handleSwipe.call(this);
     this.mod = new StateModifier({origin: [1,0.5]});
-    var surface = new ImageSurface({
-      size: [undefined, undefined]
+    var surface = new Surface({
+      size: [undefined, undefined],
+      properties: {
+        backgroundColor:'black',
+        opacity:0
+      
+      }
     });
 
-    surface.setContent('./images/market_screen.png');
     this.pivotOut = Transform.multiply(
           Transform.rotateY(-1 * Math.PI/8),
-          Transform.scale(0.9, 0.9, 1),
+          Transform.scale(0.6, 0.6, 1),
           Transform.identity);
 
 
@@ -38,9 +42,10 @@ define(function(require, exports, module) {
       }
     }.bind(this));
     surface.pipe(this._eventOutput);
-
-    //this._add(this.mod).add(surface);
-    this._add(new CircleView());
+    this.circleView = new CircleView();
+    var port = this._add(this.mod);
+    port.add(surface);
+    port.add(this.circleView);
   }
 
 
@@ -61,7 +66,7 @@ define(function(require, exports, module) {
     this.pipe(sync);
 
     sync.on('update', function(data) {
-      console.log(data.delta);
+      this.circleView.updateBars(data.delta);
       console.log(data);
     }.bind(this));
     console.log('bindings');
