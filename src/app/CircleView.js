@@ -5,6 +5,7 @@ define(function(require, exports, module){
   var Transform = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
   var MarketData = require('./data/MarketData');
+  var BarView = require('./BarView');
 
   function CircleView() {
     View.apply(this, arguments);
@@ -20,6 +21,10 @@ define(function(require, exports, module){
       barOpts['data'] = item;
       barOpts['circle'] = this;
       return new BarView(barOpts);
+    }.bind(this));
+    this.updateBars(0);
+    this.bars.forEach(function(bar){
+      this.add(bar);
     }.bind(this));
   }
 
@@ -105,5 +110,6 @@ define(function(require, exports, module){
 //    }
   }
 
+  module.exports = CircleView;
 
 });

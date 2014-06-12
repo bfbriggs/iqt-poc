@@ -11,4 +11,4 @@ define(function(require, exports, module) {
     {name: "Help", val: 0.5},
     {name: "Notifications", val: -0.5}
   ];
-}):
+});

@@ -8,7 +8,7 @@ define(function(require, exports, module) {
   var GenericSync     = require('famous/inputs/GenericSync');
   var MouseSync       = require('famous/inputs/MouseSync');
   var TouchSync       = require('famous/inputs/TouchSync');
-  
+  var CircleView = require('./CircleView');
   GenericSync.register({'mouse': MouseSync, 'touch': TouchSync});
   
   function MarketView() {
@@ -39,7 +39,8 @@ define(function(require, exports, module) {
     }.bind(this));
     surface.pipe(this._eventOutput);
 
-    this._add(this.mod).add(surface);
+    //this._add(this.mod).add(surface);
+    this._add(new CircleView());
   }
 
 
