@@ -17,12 +17,13 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
     _handleSwipe.call(this);
     this.mod = new StateModifier({origin: [1,0.5]});
+    this.rotateMod = new StateModifier({origin: [0.5,0.5]});
+    this.currAngle = 0;
     var surface = new Surface({
       size: [undefined, undefined],
       properties: {
         backgroundColor:'black',
         opacity:0
-      
       }
     });
 
@@ -45,7 +46,15 @@ define(function(require, exports, module) {
     this.circleView = new CircleView();
     var port = this._add(this.mod);
     port.add(surface);
-    port.add(this.circleView);
+    var rot = this._add(this.rotateMod);
+    rot.add(this.circleView);
+    rot.add(new Surface({
+      size:[200,200],
+      align:[0.5,0.5],
+      properties: {
+        backgroundColor:'orange'
+      }
+    }));
   }
 
 
@@ -67,8 +76,10 @@ define(function(require, exports, module) {
 
     sync.on('update', function(data) {
       this.circleView.updateBars(data.delta);
-      console.log(data);
+      //this.currAngle += (data.delta > 0)? Math.PI/16: -Math.PI/16;
+      this.rotateMod.setTransform(Transform.rotateZ(this.currAngle));
     }.bind(this));
+
     console.log('bindings');
   }
 

@@ -11,7 +11,7 @@ define(function(require, exports, module) {
     this.dataOptions = options;
     this.modifier = new StateModifier({
       origin: [0.5, 0.5],
-      align: [0,0.5]
+      align: [0.5,0.5]
       
     });
     this.surface = createSurface.call(this, options.data);
@@ -21,7 +21,6 @@ define(function(require, exports, module) {
   function createSurface(item){
     var positive = (item.val > 0);
     var gradient = (positive) ? this.options.positiveGradient : this.options.negativeGradient;
-    console.log(gradient);
     var surface = new Surface({
       size: [20, 20],
       content: '',
@@ -43,7 +42,6 @@ define(function(require, exports, module) {
 
   // update position
   BarView.prototype.updatePos = function(angleDelta){
-  console.log(angleDelta);
    var newAngle = this.getPos().angle + angleDelta;
    var coords = pol2Car(newAngle, this.dataOptions.circle.circleRadius); 
   
@@ -55,9 +53,7 @@ define(function(require, exports, module) {
    console.log("*******",coords);
    console.log('****half',halfOffset);
 
-   var widthOff = window.innerWidth/2;
-   var heightOff = window.innerHeight/2;
-    this.modifier.setTransform(Transform.translate(widthOff + coords.x,  - coords.y, 0));
+    this.modifier.setTransform(Transform.multiply(Transform.identity, Transform.translate(coords.x,  - coords.y, 0)));
   };
 
   BarView.prototype.getPos = function(){
