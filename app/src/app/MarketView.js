@@ -42,8 +42,8 @@ define(function(require, exports, module) {
         });
       }
     }.bind(this));
-    //surface.pipe(this._eventOutput);
     this.circleView = new CircleView();
+    surface.pipe(this.circleView);
     var port = this._add(this.mod);
     port.add(surface);
     var rot = this._add(this.rotateMod);

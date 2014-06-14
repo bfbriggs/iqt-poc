@@ -47,8 +47,8 @@ define(function(require, exports, module){
     this._particle = new Particle();
     this._physicsEngine.addBody(this._particle);
     this.spring = new Spring({anchor: [0, 0, 0]});
-    this.drag = new Drag({forceFunction: Drag.FORCE_FUNCTIONS.QUADRATIC});
-    this.friction = new Drag({forceFunction: Drag.FORCE_FUNCTIONS.LINEAR});
+    this.drag = new Drag({strength: 0.001, forceFunction: Drag.FORCE_FUNCTIONS.QUADRATIC});
+    this.friction = new Drag({strength: 0.005, forceFunction: Drag.FORCE_FUNCTIONS.LINEAR});
 
     this.chordLength = this.options.chordLength;
     this.barGap = this.options.barGap;
@@ -80,6 +80,7 @@ define(function(require, exports, module){
     this._touchCount = 0;
     this._touchVelocity = undefined;
     this._springState = 0;
+    this._prevPos = this.getPosition();
   }
 
 
@@ -93,7 +94,6 @@ define(function(require, exports, module){
   }
 
   function _handleStart(event) {
-    console.log(event.count);
     this._touchCount = event.count;
     if (event.count === undefined) this._touchCount = 1;
 
@@ -104,8 +104,8 @@ define(function(require, exports, module){
   }
 
   function _handleMove(event) {
-    var velocity = -event.velocity;
-    var delta = -event.delta;
+    var velocity = event.velocity;
+    var delta = event.delta;
 
     this._touchVelocity = velocity;
 
@@ -119,13 +119,14 @@ define(function(require, exports, module){
       _detachAgents.call(this);
       //if (this._onEdge) _setSpring.call(this, this._edgeSpringPosition, SpringStates.EDGE);
       _attachAgents.call(this);
-      var velocity = -event.velocity;
+      var velocity = event.velocity;
       var speedLimit = this.options.speedLimit;
       if (event.slip) speedLimit *= this.options.edgeGrip;
       if (velocity < -speedLimit) velocity = -speedLimit;
       else if (velocity > speedLimit) velocity = speedLimit;
       this.setVelocity(velocity);
       this._touchVelocity = undefined;
+      
       this._needsPaginationCheck = true;
     }
   }
@@ -179,7 +180,7 @@ define(function(require, exports, module){
     barGap: 40,
     barWidth: 20,
     dragMultiple: 1,
-    speedLimit: 10,
+    speedLimit: 100,
     edgeGrip: 0.5
   };
 
@@ -208,7 +209,6 @@ define(function(require, exports, module){
     // this should be optimized
     this.bars.map(function(bar, i){
       bar.updatePos(angleDelta);
-      console.log('i:'+i+', angle' + angleDelta);
     });   
 
 //    //right
@@ -240,7 +240,14 @@ define(function(require, exports, module){
   CircleView.prototype.getVelocity = function getVelocity(){
     return this._touchCount ? this._touchVelocity : this._particle.getVelocity1D();
   };
-  
+ 
+  CircleView.prototype.render = function(){
+    
+    this.updateBars(this.getPosition() - this._prevPos);
+    this._prevPos = this.getPosition();
+    return View.prototype.render.apply(this,arguments);
+  }
+
   module.exports = CircleView;
 
 });
