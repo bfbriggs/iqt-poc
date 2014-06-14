@@ -8,14 +8,14 @@ define(function(require, exports, module) {
   var GenericSync     = require('famous/inputs/GenericSync');
   var MouseSync       = require('famous/inputs/MouseSync');
   var TouchSync       = require('famous/inputs/TouchSync');
-  var CircleView = require('./CircleView');
+  var CircleView = require('./Circle2View');
   GenericSync.register({'mouse': MouseSync, 'touch': TouchSync});
   
   function MarketView() {
     var transitioning = false;
     
     View.apply(this, arguments);
-    _handleSwipe.call(this);
+    //_handleSwipe.call(this);
     this.mod = new StateModifier({origin: [1,0.5]});
     this.rotateMod = new StateModifier({origin: [0.5,0.5]});
     this.currAngle = 0;
@@ -42,7 +42,7 @@ define(function(require, exports, module) {
         });
       }
     }.bind(this));
-    surface.pipe(this._eventOutput);
+    //surface.pipe(this._eventOutput);
     this.circleView = new CircleView();
     var port = this._add(this.mod);
     port.add(surface);
@@ -75,6 +75,7 @@ define(function(require, exports, module) {
     this.pipe(sync);
 
     sync.on('update', function(data) {
+      console.log(data);
       this.circleView.updateBars(data.delta);
       //this.currAngle += (data.delta > 0)? Math.PI/16: -Math.PI/16;
       this.rotateMod.setTransform(Transform.rotateZ(this.currAngle));

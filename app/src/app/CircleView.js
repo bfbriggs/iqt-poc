@@ -42,7 +42,6 @@ define(function(require, exports, module){
     var triAngle = 3 * Math.PI/2 + tinyAngle * (offset + idx);
     var x = pol2Car(triAngle, this.circleRadius).x; 
     var y = pol2Car(triAngle, this.circleRadius).y; 
-    console.log('x:',x,'y:',y);
     return {
       x: x,
       y: y, 
