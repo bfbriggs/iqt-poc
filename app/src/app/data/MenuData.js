@@ -11,4 +11,4 @@ define(function(require, exports, module) {
     {title: "Help"},
     {title: "Notifications"}
   ];
-}):
+});
