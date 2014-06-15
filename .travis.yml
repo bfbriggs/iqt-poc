@@ -41,12 +41,11 @@ script:
     - grunt
 after_success:
     # Any command that using GH_OAUTH_TOKEN must pipe the output to /dev/null to not expose your oauth token
-    - git submodule add -b gh-pages https://${GH_OAUTH_TOKEN}@github.com/${GH_OWNER}/${GH_PROJECT_NAME} app > /dev/null 2>&1
-    - cd app
+    - git submodule add -b gh-pages https://${GH_OAUTH_TOKEN}@github.com/${GH_OWNER}/${GH_PROJECT_NAME} ./ > /dev/null 2>&1
     - if git checkout gh-pages; then git checkout -b gh-pages; fi
     - git rm -r .
-    - cp -R ../dist/* .
-    - cp ../dist/.* .
+    - cp -R ./dist/* .
+    - cp ./dist/.* .
     - git add -f .
     - git config user.email "travis@travis.com"
     - git config user.name "travis-automated"
