@@ -76,7 +76,10 @@ define(function(require, exports, module){
     this.bars.forEach(function(bar){
       this.container.add(bar);
     }.bind(this));
-    this.circleRotateMod = new Modifier({align:[0.5,1.6],origin:[0.5,0.5]});
+
+    var alignY = (this.circleRadius * 0.8 + window.innerHeight / 2) / window.innerHeight;
+
+    this.circleRotateMod = new Modifier({align:[0.5,alignY],origin:[0.5,0.5]});
     this.add(this.circleRotateMod).add(this.container);
     this.updateBars(0);
     this.container.pipe(this);
