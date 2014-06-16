@@ -10,19 +10,19 @@ define(function(require, exports, module) {
     this.options = this.constructor.DEFAULT_OPTIONS;
     this.dataOptions = options;
     this.modifier = new StateModifier({
-      origin: [0.5, 0.5],
+      origin: [0.5, 1],
       align: [0.5,0.5]
-      
     });
-    this.surface = createSurface.call(this, options.data);
+    console.log(options.idx);
+    this.surface = createSurface.call(this, options.data, options.idx);
     this._add(this.modifier).add(this.surface);
   }
 
-  function createSurface(item){
+  function createSurface(item, idx){
     var positive = (item.val > 0);
     var gradient = (positive) ? this.options.positiveGradient : this.options.negativeGradient;
     var surface = new Surface({
-      size: [20, 20],
+      size: [10, 20 + (idx+1) /5 ],
       content: '',
       properties: {
         backgroundImage: gradient
@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 
   // update position
   BarView.prototype.updatePos = function(angleDelta){
-   var newAngle = this.getPos().angle + angleDelta;
+    var newAngle = this.getPos().angle + angleDelta;
    var coords = pol2Car(newAngle, this.dataOptions.circle.circleRadius); 
   
    this.dataOptions.x = coords.x;
@@ -50,10 +50,11 @@ define(function(require, exports, module) {
    this.dataOptions.angle = newAngle;
 
     var halfOffset = this.dataOptions.circle.chordLength / 2 + 100;
-   console.log("*******",coords);
-   console.log('****half',halfOffset);
-
-    this.modifier.setTransform(Transform.multiply(Transform.identity, Transform.translate(coords.x,  - coords.y, 0)));
+   //console.log("*******",coords);
+    var flipAngle = (this.dataOptions.data.val > 0) ? 0 : Math.PI;
+    var flipMult = (this.dataOptions.data.val > 0) ? 1 : -1;
+    this.modifier.setTransform(Transform.multiply(Transform.rotateZ(newAngle + flipAngle),Transform.translate(0, -150 * flipMult)));
+//    this.modifier.setTransform(Transform.multiply(Transform.rotateZ(newAngle), Transform.translate(coords.x,  - coords.y, 0)));
   };
 
   BarView.prototype.getPos = function(){

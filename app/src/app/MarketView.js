@@ -48,13 +48,15 @@ define(function(require, exports, module) {
     port.add(surface);
     var rot = this._add(this.rotateMod);
     rot.add(this.circleView);
-    rot.add(new Surface({
+    /*rot.add(new Surface({
       size:[200,200],
       align:[0.5,0.5],
+      opacity:0,
       properties: {
-        backgroundColor:'orange'
+        backgroundColor:'orange',
+        opacity: 0
       }
-    }));
+    }));*/
   }
 
 

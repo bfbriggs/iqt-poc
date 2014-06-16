@@ -6,6 +6,7 @@ define(function(require, exports, module){
   var StateModifier = require('famous/modifiers/StateModifier');
   var MarketData = require('./data/MarketData');
   var BarView = require('./Bar2View');
+  var SliderView = require('./SliderView');
   var EventHandler = require('famous/core/EventHandler');
 
   //PHYSICS
@@ -47,8 +48,9 @@ define(function(require, exports, module){
     this._particle = new Particle();
     this._physicsEngine.addBody(this._particle);
     this.spring = new Spring({anchor: [0, 0, 0]});
-    this.drag = new Drag({strength: 0.001, forceFunction: Drag.FORCE_FUNCTIONS.QUADRATIC});
-    this.friction = new Drag({strength: 0.005, forceFunction: Drag.FORCE_FUNCTIONS.LINEAR});
+    this.drag = new Drag({strength: 1E-4, forceFunction: Drag.FORCE_FUNCTIONS.QUADRATIC});
+    this.friction = new Drag({strength: 4E-3, forceFunction: Drag.FORCE_FUNCTIONS.LINEAR});
+
 
     this.chordLength = this.options.chordLength;
     this.barGap = this.options.barGap;
@@ -65,7 +67,8 @@ define(function(require, exports, module){
       var barOpts = barPos.call(this, idx, offset);
       barOpts['data'] = item;
       barOpts['circle'] = this;
-      console.log(barOpts);
+      barOpts['idx'] = idx;
+      //console.log(barOpts);
       return new BarView(barOpts);
     }.bind(this));
     this.bars.forEach(function(bar){
@@ -73,6 +76,7 @@ define(function(require, exports, module){
     }.bind(this));
     this.updateBars(0);
 
+//    this._add(new SliderView({size:[10,50]}));
 
     _bindEvents.call(this);
 
@@ -147,7 +151,7 @@ define(function(require, exports, module){
     var barOffset = this.barWidth + this.barGap;
     //the angle between two bar centers
     var tinyAngle = 2 * Math.PI * barOffset / this.circumference;
-    var triAngle = 3 * Math.PI/2 + tinyAngle * (offset + idx);
+    var triAngle = tinyAngle * (offset + idx);
     var x = pol2Car(triAngle, this.circleRadius).x; 
     var y = pol2Car(triAngle, this.circleRadius).y; 
     return {
@@ -177,8 +181,8 @@ define(function(require, exports, module){
   CircleView.DEFAULT_OPTIONS = {
     chordLength: 600,
     csHeight: 300,
-    barGap: 40,
-    barWidth: 20,
+    barGap: (19.35483871*Math.PI - 10),
+    barWidth: 10,
     dragMultiple: 1,
     speedLimit: 100,
     edgeGrip: 0.5
