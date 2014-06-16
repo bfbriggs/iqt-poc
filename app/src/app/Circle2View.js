@@ -64,7 +64,8 @@ define(function(require, exports, module){
     // Hard-coded... for now...
     var offset = 0;
     // initialize bars
-    this.bars = MarketData.map(function(item, idx){
+    this.startAngle = 0;
+    this.bars = MarketData.slice(0,42).map(function(item, idx){
       var barOpts = barPos.call(this, idx, offset);
       barOpts['data'] = item;
       barOpts['circle'] = this;
@@ -75,7 +76,8 @@ define(function(require, exports, module){
     this.bars.forEach(function(bar){
       this.container.add(bar);
     }.bind(this));
-    this.add(new Modifier({align:[0.5,1.6],origin:[0.5,0.5]})).add(this.container);
+    this.circleRotateMod = new Modifier({align:[0.5,1.6],origin:[0.5,0.5]});
+    this.add(this.circleRotateMod).add(this.container);
     this.updateBars(0);
     this.container.pipe(this);
 
@@ -89,6 +91,10 @@ define(function(require, exports, module){
     this._touchVelocity = undefined;
     this._springState = 0;
     this._prevPos = this.getPosition();
+    
+    this.bars.map(function(bar, i){
+      bar.updatePos(0);
+    });   
   }
 
 
@@ -185,8 +191,8 @@ define(function(require, exports, module){
   CircleView.DEFAULT_OPTIONS = {
     chordLength: window.innerWidth,
     csHeight: window.innerHeight * 1 / 6,
-    barGap: (40*Math.PI - 30),
-    barWidth: 30,
+    barGap: 100,
+    barWidth: window.innerWidth / 18,
     dragMultiple: 1,
     speedLimit: 100,
     edgeGrip: 0.5
@@ -210,27 +216,12 @@ define(function(require, exports, module){
   CircleView.prototype.updateBars = function(delta){
     var angleDelta = offset2Ang.call(this, {deltaX:delta});
     //Grab slice that definitely needs to be update
+    this.startAngle += angleDelta;
+    this.circleRotateMod.setTransform(Transform.multiply(Transform.identity,Transform.rotateZ(this.startAngle)));
     var visibleBarsObj = this.getVisibleBars();
     var visibleBars = visibleBarsObj.arr;
     var startOffset = visibleBarsObj.startOffset;
     var endOffset = visibleBarsObj.endOffset;
-    // this should be optimized
-    this.bars.map(function(bar, i){
-      bar.updatePos(angleDelta);
-    });   
-
-//    //right
-//    if (delta > 0){
-//      this.getLeft(this.bars).concat(visibleBars).map(function(bar){
-//        bar.updatePos(delta);
-//      });   
-//    }
-//    //left
-//    else if (delta < 0){
-//      visibleBars.concat(this.getLeft(this.bars)).map(function(bar){
-//        bar.updatePos(delta);
-//      });   
-//    }
   }
 
   CircleView.prototype.setPosition = function setPosition(x){

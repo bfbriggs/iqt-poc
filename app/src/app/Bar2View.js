@@ -13,7 +13,6 @@ define(function(require, exports, module) {
       origin: [0.5, 1],
       align: [0.5,0.5]
     });
-    console.log(options.idx);
     this.surface = createSurface.call(this, options.data, options.idx);
     this._add(this.modifier).add(this.surface);
   }
@@ -22,7 +21,7 @@ define(function(require, exports, module) {
     var positive = (item.val > 0);
     var gradient = (positive) ? this.options.positiveGradient : this.options.negativeGradient;
     var surface = new Surface({
-      size: [10, 20 + (idx+1) /5 ],
+      size: [window.innerWidth/18, window.innerWidth/9 + Math.max(5 , Math.abs(item.val * 3000)) ],
       content: '',
       properties: {
         backgroundImage: gradient
