@@ -76,7 +76,7 @@ define(function(require, exports, module){
       barOpts['idx'] = idx;
       return new BarView(barOpts);
     }.bind(this));
-    this.container = new ContainerSurface({size:[this.circleRadius,this.circleRadius], properties:{backgroundColor:'black'}});
+    this.container = new ContainerSurface({size:[this.circleRadius,this.circleRadius], properties:{}});
     this.bars.forEach(function(bar){
       this.container.add(bar);
     }.bind(this));
