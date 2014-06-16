@@ -22,10 +22,12 @@ define(function(require, exports, module) {
     var gradient = (positive) ? this.options.positiveGradient : this.options.negativeGradient;
     var surface = new Surface({
       size: [window.innerWidth/18, window.innerWidth/9 + Math.max(5 , Math.abs(item.val * 3000)) ],
-      content: '',
+      content: item.ticker,
       properties: {
         backgroundImage: gradient,
-        borderRadius: '10px'
+        borderRadius: '10px',
+        color: 'AntiqueWhite',
+        textAlign: 'center'
       }
     });
 
@@ -50,7 +52,6 @@ define(function(require, exports, module) {
    this.dataOptions.angle = newAngle;
 
     var halfOffset = this.dataOptions.circle.chordLength / 2 + 100;
-   //console.log("*******",coords);
     var flipAngle = (this.dataOptions.data.val > 0) ? 0 : Math.PI;
     var flipMult = (this.dataOptions.data.val > 0) ? 1 : -1;
     var centerTranslate = window.innerHeight;
