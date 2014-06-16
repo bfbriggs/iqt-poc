@@ -24,7 +24,8 @@ define(function(require, exports, module) {
       size: [window.innerWidth/18, window.innerWidth/9 + Math.max(5 , Math.abs(item.val * 3000)) ],
       content: '',
       properties: {
-        backgroundImage: gradient
+        backgroundImage: gradient,
+        borderRadius: '10px'
       }
     });
 
@@ -66,8 +67,8 @@ define(function(require, exports, module) {
   };
 
   BarView.DEFAULT_OPTIONS = {
-    negativeGradient: "linear-gradient(to left,#500a14 0% ,#d91a36 100% )",
-    positiveGradient: "linear-gradient(to right,#034f5d 0% ,#07bcde 100% )"
+    negativeGradient: "linear-gradient(to bottom, rgba(123,1,0,1) 0%, rgba(207,4,4,1) 72%)",
+    positiveGradient: "linear-gradient(to bottom, rgba(32,192,240,1) 0%,rgba(20,120,140,1) 72%)"
   };
   
   // angle is the central angle of the arc from the top of the circle to the specified point
