@@ -52,6 +52,7 @@ define(function(require, exports, module){
     this.drag = new Drag({strength: 1E-4, forceFunction: Drag.FORCE_FUNCTIONS.QUADRATIC});
     this.friction = new Drag({strength: 4E-3, forceFunction: Drag.FORCE_FUNCTIONS.LINEAR});
 
+    var ghostBars = 49;
 
     this.chordLength = this.options.chordLength;
     this.barGap = this.options.barGap;
@@ -61,11 +62,14 @@ define(function(require, exports, module){
     this.circleRadius = (this.chordLength / 2) / Math.sin(this.centralAngle / 2);
     this.circumference = 2 * Math.PI * this.circleRadius;
     this.arcLength = this.circumference * this.centralAngle / (2 * Math.PI);
+
+    this.barGap = this.circumference / (ghostBars + 1) - this.barWidth;
+
     // Hard-coded... for now...
     var offset = 0;
     // initialize bars
     this.startAngle = 0;
-    this.bars = MarketData.slice(0,42).map(function(item, idx){
+    this.bars = MarketData.slice(0, ghostBars + 1).map(function(item, idx){
       var barOpts = barPos.call(this, idx, offset);
       barOpts['data'] = item;
       barOpts['circle'] = this;
@@ -98,6 +102,8 @@ define(function(require, exports, module){
     this.bars.map(function(bar, i){
       bar.updatePos(0);
     });   
+  
+
   }
 
 
@@ -194,7 +200,7 @@ define(function(require, exports, module){
   CircleView.DEFAULT_OPTIONS = {
     chordLength: window.innerWidth,
     csHeight: window.innerHeight * 1 / 6,
-    barGap: 100,
+    barGap: 80,
     barWidth: window.innerWidth / 18,
     dragMultiple: 1,
     speedLimit: 100,
