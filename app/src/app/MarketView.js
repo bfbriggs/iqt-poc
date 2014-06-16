@@ -17,7 +17,7 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
     //_handleSwipe.call(this);
     this.mod = new StateModifier({origin: [1,0.5]});
-    this.rotateMod = new StateModifier({origin: [0.5,0.5]});
+    this.rotateMod = new StateModifier({origin: [1,0.5]});
     this.currAngle = 0;
     var surface = new Surface({
       size: [undefined, undefined],
@@ -40,14 +40,18 @@ define(function(require, exports, module) {
         this.mod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' }, function(){
           transitioning = false;
         });
+        this.rotateMod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' }, function(){
+          transitioning = false;
+        });
+        console.log("th");
       }
     }.bind(this));
+    //var port = this._add(this.mod);
+    //port.add(surface);
     this.circleView = new CircleView();
     surface.pipe(this.circleView);
-    var port = this._add(this.mod);
-    port.add(surface);
-    var rot = this._add(this.rotateMod);
-    rot.add(this.circleView);
+    this.rot = this._add(this.rotateMod);
+    this.rot.add(this.circleView);
     /*rot.add(new Surface({
       size:[200,200],
       align:[0.5,0.5],
@@ -57,13 +61,20 @@ define(function(require, exports, module) {
         opacity: 0
       }
     }));*/
+    this.circleView.on('click',function(){
+        this._eventOutput.emit('showMenu');
+        this.rotateMod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' }, function(){
+          transitioning = false;
+        });
+    console.log('caught');
+    }.bind(this));
   }
 
 
   MarketView.prototype = Object.create(View.prototype);
   
   MarketView.prototype.swingBack = function(){
-      this.mod.setTransform(Transform.identity, { duration : 600, curve: 'easeOut' });
+      this.rotateMod.setTransform(Transform.identity, { duration : 600, curve: 'easeOut' });
   };
   
   MarketView.prototype.constructor = MarketView;

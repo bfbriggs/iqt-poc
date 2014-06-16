@@ -8,6 +8,7 @@ define(function(require, exports, module){
   var BarView = require('./Bar2View');
   var SliderView = require('./SliderView');
   var EventHandler = require('famous/core/EventHandler');
+  var ContainerSurface = require('famous/surfaces/ContainerSurface');
 
   //PHYSICS
   var PhysicsEngine = require('famous/physics/PhysicsEngine');
@@ -71,11 +72,15 @@ define(function(require, exports, module){
       //console.log(barOpts);
       return new BarView(barOpts);
     }.bind(this));
+    this.container = new ContainerSurface({properties:{backgroundColor:'#0E0E0E'}});
     this.bars.forEach(function(bar){
-      this.add(bar);
+      this.container.add(bar);
     }.bind(this));
+    this.add(this.container);
     this.updateBars(0);
+    this.container.pipe(this);
 
+    this.container.on('click',function(){this._eventOutput.emit('click');}.bind(this));
 //    this._add(new SliderView({size:[10,50]}));
 
     _bindEvents.call(this);
