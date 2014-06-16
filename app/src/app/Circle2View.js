@@ -84,6 +84,10 @@ define(function(require, exports, module){
     var alignY = (this.circleRadius * 0.8 + window.innerHeight / 2) / window.innerHeight;
 
     this.circleRotateMod = new Modifier({align:[0.5,alignY],origin:[0.5,0.5]});
+    this.circleRotateMod.alignFrom(function(){
+      var alignY = (this.circleRadius * 0.8 + window.innerHeight / 2) / window.innerHeight;
+      return [0.5,alignY];
+    }.bind(this));
     this.add(this.circleRotateMod).add(this.container);
     this.updateBars(0);
     this.container.pipe(this);
