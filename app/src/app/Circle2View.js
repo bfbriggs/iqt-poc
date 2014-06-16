@@ -72,7 +72,7 @@ define(function(require, exports, module){
       barOpts['idx'] = idx;
       return new BarView(barOpts);
     }.bind(this));
-    this.container = new ContainerSurface({size:[this.circleRadius,this.circleRadius], properties:{backgroundColor:'#0E0E0E'}});
+    this.container = new ContainerSurface({size:[this.circleRadius,this.circleRadius], properties:{backgroundColor:'black'}});
     this.bars.forEach(function(bar){
       this.container.add(bar);
     }.bind(this));

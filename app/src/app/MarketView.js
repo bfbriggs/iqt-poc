@@ -34,6 +34,24 @@ define(function(require, exports, module) {
           Transform.identity);
 
 
+    //var port = this._add(this.mod);
+    //port.add(surface);
+    this.marketContainer = new ContainerSurface({properties:{backgroundColor:'#0E0E0E',overflow:'hidden'}});
+    this.circleView = new CircleView();
+    this.marketContainer.pipe(this.circleView);
+    //this.rot = this._add(this.rotateMod);
+    this.marketContainer.add(this.circleView)
+    this._add(this.rotateMod).add(this.marketContainer);
+    this.button = new Surface({size:[80,80],properties:{backgroundColor:'white',borderRadius:'10px'}});
+    this._add(new Modifier()).add(this.button);
+    this.button.on('click',function(){
+        this._eventOutput.emit('showMenu');
+        this.rotateMod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' }, function(){
+          transitioning = false;
+        });
+    console.log('caught');
+    }.bind(this));
+    
     surface.on('click',function(){
       this._eventOutput.emit('showMenu');
       if (!transitioning){
@@ -46,31 +64,6 @@ define(function(require, exports, module) {
         });
         console.log("th");
       }
-    }.bind(this));
-    //var port = this._add(this.mod);
-    //port.add(surface);
-    this.marketContainer = new ContainerSurface({properties:{overflow:'hidden'}});
-    this.circleView = new CircleView();
-    this.marketContainer.pipe(this.circleView);
-    //this.rot = this._add(this.rotateMod);
-    this.marketContainer.add(this.circleView)
-    this._add(this.rotateMod).add(this.marketContainer);
-      //this.rot.add(this.circleView);
-    /*rot.add(new Surface({
-      size:[200,200],
-      align:[0.5,0.5],
-      opacity:0,
-      properties: {
-        backgroundColor:'orange',
-        opacity: 0
-      }
-    }));*/
-    this.marketContainer.on('click',function(){
-        this._eventOutput.emit('showMenu');
-        this.rotateMod.setTransform(this.pivotOut, { duration : 600, curve: 'easeOut' }, function(){
-          transitioning = false;
-        });
-    console.log('caught');
     }.bind(this));
   }
 
