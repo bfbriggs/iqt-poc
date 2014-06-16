@@ -53,7 +53,8 @@ define(function(require, exports, module) {
    //console.log("*******",coords);
     var flipAngle = (this.dataOptions.data.val > 0) ? 0 : Math.PI;
     var flipMult = (this.dataOptions.data.val > 0) ? 1 : -1;
-    this.modifier.setTransform(Transform.multiply(Transform.rotateZ(newAngle + flipAngle),Transform.translate(0, -150 * flipMult)));
+    var centerTranslate = window.innerHeight;
+    this.modifier.setTransform(Transform.multiply(Transform.rotateZ(newAngle + flipAngle),Transform.translate(0, -this.dataOptions.circle.circleRadius * 0.8 * flipMult)));
 //    this.modifier.setTransform(Transform.multiply(Transform.rotateZ(newAngle), Transform.translate(coords.x,  - coords.y, 0)));
   };
 

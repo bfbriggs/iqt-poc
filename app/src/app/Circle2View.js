@@ -69,14 +69,13 @@ define(function(require, exports, module){
       barOpts['data'] = item;
       barOpts['circle'] = this;
       barOpts['idx'] = idx;
-      //console.log(barOpts);
       return new BarView(barOpts);
     }.bind(this));
-    this.container = new ContainerSurface({properties:{backgroundColor:'#0E0E0E'}});
+    this.container = new ContainerSurface({size:[this.circleRadius,this.circleRadius], properties:{backgroundColor:'#0E0E0E'}});
     this.bars.forEach(function(bar){
       this.container.add(bar);
     }.bind(this));
-    this.add(this.container);
+    this.add(new Modifier({align:[0.5,1.6],origin:[0.5,0.5]})).add(this.container);
     this.updateBars(0);
     this.container.pipe(this);
 
@@ -184,10 +183,10 @@ define(function(require, exports, module){
   CircleView.prototype.constructor = CircleView;
 
   CircleView.DEFAULT_OPTIONS = {
-    chordLength: 600,
-    csHeight: 300,
-    barGap: (19.35483871*Math.PI - 10),
-    barWidth: 10,
+    chordLength: window.innerWidth,
+    csHeight: window.innerHeight * 1 / 6,
+    barGap: (40*Math.PI - 30),
+    barWidth: 30,
     dragMultiple: 1,
     speedLimit: 100,
     edgeGrip: 0.5
